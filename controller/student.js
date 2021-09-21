@@ -13,8 +13,8 @@ exports.postCreateStudent = (req, res) => {
    
     const student = new Student(id,name,batch);
     student.save()
-    .then(result=>res.json({message:"Inserted successfully"}))
-    .catch(err=>res.status(422).json({message:"error occured"}))
+    .then(_=>res.json({message:"Inserted successfully"}))
+    .catch(_=>res.status(422).json({message:"error occured"}))
   };
 
   //to get all students in file
@@ -27,18 +27,7 @@ exports.postCreateStudent = (req, res) => {
       Student.getWithoutMentor(students=>res.json({message:students}))
   }
 
-  exports.removeMentor = (req,res)=>{
-    const studentId = req.body.stuId;
-    Student.removeMentor(studentId)
-  }
-
-  exports.addMentor = (req,res)=>{
-    const studentId = req.body.stuId;
-    const newMentId = req.body.newMentId;
-
-    Student.addMentor(newMentId,studentId)
-  }
-
+  //remove student from existing mentor adds student in new mentor change mentor in student
   exports.changeMentor = (req,res)=>{
       const oldMent = req.body.mentId;
       const studentId = req.body.stuId;
@@ -50,10 +39,20 @@ exports.postCreateStudent = (req, res) => {
       }
 
       Mentor.removeStudent(oldMent,studentId)
-      .then(result=>Mentor.addStudents(newMentId,[studentId]))
-      .then(result=>Student.addMentor(newMentId,[studentId]))
-      .then(result=>res.send({message:"Changed mentor Successfully"}))
+      .then(_=>Mentor.addStudents(newMentId,[studentId]))
+      .then(_=>Student.addMentor(newMentId,[studentId]))
+      .then(_=>res.send({message:"Changed mentor Successfully"}))
       .catch(err=>console.log(err))
   }
 
   
+  exports.removeMentor = (req,res)=>{
+    const studentId = req.body.stuId;
+    Student.removeMentor(studentId)
+  }
+  
+  exports.addMentor = (req,res)=>{
+    const studentId = req.body.stuId;
+    const newMentId = req.body.newMentId;
+    Student.addMentor(newMentId,studentId)
+  }

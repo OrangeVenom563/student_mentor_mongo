@@ -20,6 +20,8 @@ module.exports = class Mentor {
       const db = getDb();
       return db.collection('mentors')
       .updateOne({_id:mentId}, { $pull: { students: stuId}})
+      .then(_=>_)
+      .catch(err=>console.log(err))
   }
 
 //   //adding one or more students to a mentor
@@ -27,6 +29,8 @@ module.exports = class Mentor {
     const db = getDb();
     return db.collection('mentors')
       .updateOne({_id:mentId},  { $addToSet: { students: { $each:students } } })
+      .then(_=>_)
+      .catch(err=>console.log(err))
   }
   
 //   //gets all the mentors

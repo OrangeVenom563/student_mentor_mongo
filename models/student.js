@@ -9,7 +9,6 @@ module.exports = class Student {
   }
 
   //creates new student
-
   save = () =>{
     const db = getDb();
     return  db.collection('students').insertOne(this); 
@@ -27,14 +26,16 @@ module.exports = class Student {
       .catch(err=>console.log(err))
   };
 
+  //removes mentor from student
   static removeMentor = (studentId) =>{
     const db = getDb();
     return db.collection('students')
     .updateOne({_id:studentId}, {$unset:{"mentor":""}})
-    .then(result=>result)
+    .then(_=>_)
     .catch(err=>console.log(err))
   }
 
+  //gets all the students in db
   static getAll(cb){
     const db = getDb();
     return db.collection('students')
@@ -47,6 +48,7 @@ module.exports = class Student {
       });
  }
 
+ //gets list of students without mentor
  static getWithoutMentor(cb){
   const db = getDb();
   return db.collection('students')
