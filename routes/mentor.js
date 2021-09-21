@@ -6,10 +6,10 @@ const mentorController = require('../controller/mentor');
 router.post('/create-mentor',mentorController.postCreateMentor);
 
 //remove a student from mentor to assign student to other mentor
-// router.post('/remove-student',mentorController.postRemoveStudent);
+router.post('/remove-student',mentorController.postRemoveStudent);
 
 // //assign a student of multiple students to a mentor
-// router.post('/add-student',mentorController.postAddStudents);
+router.post('/add-student',mentorController.postAddStudents);
 
 // //send list of all mentors
 router.get('/all-mentors',mentorController.getAllMentors)

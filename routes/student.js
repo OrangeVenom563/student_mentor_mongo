@@ -9,9 +9,9 @@ router.post('/create-student',studentController.postCreateStudent);
 router.get('/all-students',studentController.getAllStudents);
 
 // //list students without mentor
-// router.get('/without-mentor',studentController.getStudentsWithoutMentor);
+router.get('/without-mentor',studentController.getStudentsWithoutMentor);
 
 // //change mentor of a student
-// router.post('/change-mentor',studentController.changeMentor);
+router.post('/change-mentor',studentController.changeMentor);
 
 module.exports = router;

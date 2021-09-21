@@ -17,35 +17,23 @@ module.exports = class Student {
   
 
   //assigns mentor to students
-  // static addMentor = (mentId, studsToAddMentor) => {
-  //   return new Promise((resolve,reject)=>{
-  //     getStudentsFromFile((students) => {
-  //       const updatedStudents = students.map((stud) => {
-  //         if (studsToAddMentor.indexOf(stud.id) != -1) stud.mentor = mentId;
-  //         return stud;
-  //       });
-  //       fs.writeFile(p, JSON.stringify(updatedStudents), (err) =>
-  //         console.log(err)
-  //       );
-  //       resolve("Added Mentor to students")
-  //     })
-  //   })
-  // };
+  static addMentor = (mentId, studsToAddMentor) => {
+    const db = getDb();
+    return db.collection('students')
+      .updateMany({ _id: {$in:studsToAddMentor}},
+        { $set: { mentor: mentId } }
+      )
+      .then(result=>console.log(result))
+      .catch(err=>console.log(err))
+  };
 
-  // static removeMentor = (studentId) =>{
-  //   return new Promise((resolve,reject)=>{
-  //     getStudentsFromFile((students)=>{
-  //       const updatedStudents = students.map((stud)=>{
-  //         if(stud.id==studentId) delete stud.mentor;
-  //         return stud
-  //       })
-  //       fs.writeFile(p, JSON.stringify(updatedStudents), (err) =>
-  //       console.log(err)
-  //     );
-  //     resolve("Removed Mentor")
-  //     })
-  //   })
-  // }
+  static removeMentor = (studentId) =>{
+    const db = getDb();
+    return db.collection('students')
+    .updateOne({_id:studentId}, {$unset:{"mentor":""}})
+    .then(result=>result)
+    .catch(err=>console.log(err))
+  }
 
   static getAll(cb){
     const db = getDb();
@@ -58,4 +46,16 @@ module.exports = class Student {
         cb('error occured')
       });
  }
+
+ static getWithoutMentor(cb){
+  const db = getDb();
+  return db.collection('students')
+    .find({"mentor":{$exists:false}})
+    .toArray()
+    .then(students => cb(students))
+    .catch(err => {
+      console.log(err);
+      cb('error occured')
+    });
+}
 };

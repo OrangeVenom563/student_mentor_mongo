@@ -14,27 +14,36 @@ exports.postCreateMentor =async (req, res) => {
     .catch(err=>res.status(422).json({message:"error occured"}))
   };
 
-  // exports.postRemoveStudent = (req,res)=>{
-  //     const mentorId = req.body.mentId;
-  //     const studentId = req.body.stuId;
-
-  //     Mentor.removeStudent(mentorId,studentId)
-  //     .then(result=>Student.removeMentor(studentId))
-  //     .then(result=>res.send({message:result}))
-  //     .catch(err=>console.log(err))
-  // }
-
-  // exports.postAddStudents = (req,res)=>{
-  //       const mentorId = req.body.mentId;
-  //       const students = req.body.students;
-
-  //       Mentor.addStudents(mentorId,students)
-  //       .then(result=>console.log(result))
-  //       .then(result=>Student.addMentor(mentorId,students))
-  //       .then(response=>res.json({message:response}))
-  //       .catch(error=>res.send({message:error}))
-  // }
-  
   exports.getAllMentors = (req,res)=>{
     Mentor.getAll(mentors=> res.json({message:mentors}))
   }
+
+  exports.postAddStudents = (req,res)=>{
+    const mentorId = req.body.mentId;
+    const students = req.body.students;
+
+    if(!mentorId||!students){
+      res.json({message:"Add all the fields"})
+    }
+
+    Mentor.addStudents(mentorId,students)
+    .then(result=>res.json({message:"Added successfully"}))
+    .catch(err=>res.status(422).json({message:"Error occured"}))
+  }
+
+  exports.postRemoveStudent = (req,res)=>{
+      const mentorId = req.body.mentId;
+      const studentId = req.body.stuId;
+
+      if(!mentorId||!studentId){
+        res.json({message:"Add all the fields"})
+      }
+
+      Mentor.removeStudent(mentorId,studentId)
+      .then(result=>res.json({message:"Removed student"}))
+      .catch(err=>res.send({message:"error occured"}))
+  }
+
+ 
+  
+  

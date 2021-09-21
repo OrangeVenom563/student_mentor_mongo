@@ -16,38 +16,18 @@ module.exports = class Mentor {
 
 
 //   //removing student from existing mentor to add to new mentor
-//   static removeStudent(mentId, stuId) {
-//     return new Promise((resolve,reject)=>{
-//       getMentorsFromFile((mentors) => {
-//         const idx = mentors.findIndex(ment => ment.id === mentId);
-//         if(idx==-1){
-//           reject(false)
-//           return ;
-//         }
-//         const stuRemoved = mentors[idx].students.filter((stu) => stu !== stuId);
-//         mentors[idx].students = stuRemoved;
-//         fs.writeFile(p, JSON.stringify(mentors), (err) => {console.log(err)}); 
-//         resolve(true)
-//       });
-//     })
-//   }
+  static removeStudent(mentId, stuId) {
+      const db = getDb();
+      return db.collection('mentors')
+      .updateOne({_id:mentId}, { $pull: { students: stuId}})
+  }
 
 //   //adding one or more students to a mentor
-//   static addStudents(mentId, students) {
-//     return new Promise((resolve,reject)=>{
-//       getMentorsFromFile((mentors) => {
-//         const idx = mentors.findIndex((ment) => ment.id === mentId);
-//         if(idx===-1){
-//           reject("Mentor not found")
-//           return ;
-//         }
-//         if (!mentors[idx].students){ mentors[idx].students = []};
-//         mentors[idx].students.push(...students);
-//         fs.writeFile(p, JSON.stringify(mentors), (err) => {console.log(err)});
-//         resolve("Added successfully")
-//       });
-//     })
-//   }
+  static addStudents(mentId, students) {
+    const db = getDb();
+    return db.collection('mentors')
+      .updateOne({_id:mentId},  { $addToSet: { students: { $each:students } } })
+  }
   
 //   //gets all the mentors
   static getAll(cb){
